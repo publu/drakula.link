@@ -5,6 +5,10 @@ const cheerio = require('cheerio');
 const app = express();
 const port = 3000;
 
+app.get('*', (req, res) => {
+    res.send('Hello from Express on Vercel!');
+});
+
 // Dynamic route
 app.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -34,6 +38,4 @@ app.get('/:id', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+module.exports = app;
