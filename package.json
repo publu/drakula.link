@@ -9,8 +9,7 @@
 		"format": "biome format app --write",
 		"lint": "biome check app",
 		"start": "tsx app/index.ts",
-		"typecheck": "tsc --noEmit",
-		"vercel-build": "tsup app --clean --format cjs --env.NODE_ENV production --env.DEPLOYMENT_ENV vercel --out-dir api"
+		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"axios": "^1.6.8",
