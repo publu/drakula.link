@@ -1,56 +1,39 @@
-import { join } from "path";
-import bodyParser from "body-parser";
-import cors from "cors";
-import express from "express";
-import helmet from "helmet";
-import jsend from "jsend";
-
-import logger from "../logger";
-import errorHandler from "../middlewares/error-handler";
-import todoRoutes from "./routes/todo";
+const express = require('express');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 const app = express();
-const isVercel = process.env.DEPLOYMENT_ENV === "vercel";
+const port = 3000;
 
-// middleware routes
-const isProduction = process.env.NODE_ENV === "production";
-if (isProduction) {
-	app.use(helmet());
-}
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(jsend.middleware); // more detail on https://github.com/omniti-labs/jsend
-app.use(errorHandler);
-const options = {
-	dotfiles: "ignore",
-	etag: false,
-	extensions: ["htm", "html"],
-	index: false,
-	maxAge: "1d",
-	redirect: false,
-	setHeaders(res: express.Response) {
-		res.set("x-static-timestamp", Date.now().toString());
-	},
-};
+// Dynamic route
+app.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    // Construct your URL using the dynamic part of the path
+    const targetUrl = `https://drakula.app/post/${id}`;
 
-app.use("/static", express.static(join(__dirname, "../public"), options));
+    try {
+        const response = await axios.get(targetUrl);
+        const $ = cheerio.load(response.data);
+        const ogTitle = $('meta[property="og:title"]').attr('content') || 'Title not available';
+        const ogImage = $('meta[property="og:image"]').attr('content') || 'Image not available';
+        const ogDescription = $('meta[property="og:description"]').attr('content') || 'Description not available';
 
-app.get("/", (_req, res: express.Response) => {
-	res.send("Open Swagger UI at http://localhost:3000/static/index.html");
+        // Render or send the data as you need
+        // For simplicity, this example just sends a simple HTML page
+        res.send(`
+            <div style="border:1px solid #ccc; padding:10px;">
+                <h3>${ogTitle}</h3>
+                <img src="${ogImage}" alt="OG Image" style="max-width:100%;height:auto;">
+                <p>${ogDescription}</p>
+                <a href="${targetUrl}" target="_blank">Go to site</a>
+            </div>
+        `);
+    } catch (error) {
+        console.error('Error fetching URL:', error);
+        res.status(500).send('Error fetching the URL.');
+    }
 });
 
-app.get("/api", (_req, res: express.Response) => {
-	res.setHeader("Content-Type", "application/json");
-	res.json({ name: "Hello world" });
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
-
-app.use("/api/todo", todoRoutes);
-
-if (!isVercel) {
-	app.listen(3000).on("listening", () => {
-		logger.info("server is listening on port http://localhost:3000");
-	});
-}
-
-module.exports = app;
