@@ -18,7 +18,11 @@ app.get("/:id", async (req, res) => {
     const twitterTitle = $('meta[name="twitter:title"]').attr("content") || ogTitle;
     const twitterImage = $('meta[name="twitter:image"]').attr("content") || ogImage;
     const twitterDescription = $('meta[name="twitter:description"]').attr("content") || ogDescription;
-    const mp4Link = $('video[src$=".mp4"]').attr("src") || "No MP4 link available";
+    const ogImageURL = new URL(ogImage);
+    const ogImagePathParts = ogImageURL.pathname.split('/');
+    const videoIdIndex = ogImagePathParts.findIndex(part => part === 'thumbnail.jpg') - 1;
+    const videoId = ogImagePathParts[videoIdIndex];
+    const mp4Link = `https://vz-629bcc17-285.b-cdn.net/${videoId}/play_720p.mp4`;
     res.send(`
             <!DOCTYPE html>
             <html lang="en">
