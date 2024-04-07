@@ -18,6 +18,7 @@ app.get("/:id", async (req, res) => {
     const twitterTitle = $('meta[name="twitter:title"]').attr("content") || ogTitle;
     const twitterImage = $('meta[name="twitter:image"]').attr("content") || ogImage;
     const twitterDescription = $('meta[name="twitter:description"]').attr("content") || ogDescription;
+    const mp4Link = $('video[src$=".mp4"]').attr("src") || "No MP4 link available";
     res.send(`
             <!DOCTYPE html>
             <html lang="en">
@@ -30,6 +31,12 @@ app.get("/:id", async (req, res) => {
                 <meta name="twitter:title" content="${twitterTitle}">
                 <meta name="twitter:image" content="${twitterImage}">
                 <meta name="twitter:description" content="${twitterDescription}">
+                <meta name="twitter:card" content="player">
+                <meta name="twitter:site" content="@DrakulaApp">
+                <meta name="twitter:player" content="${mp4Link}">
+                <meta name="twitter:player:width" content="720">
+                <meta name="twitter:player:height" content="1280">
+                
             </head>
             <body>
                 <div style="border:1px solid #ccc; padding:10px;">

@@ -5,10 +5,10 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsup app --clean --format cjs,esm --env.NODE_ENV production",
-		"dev": "tsx watch app/index.ts",
+		"dev": "tsx watch api/index.js",
 		"format": "biome format app --write",
 		"lint": "biome check app",
-		"start": "tsx app/index.ts",
+		"start": "tsx api/index.js",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
