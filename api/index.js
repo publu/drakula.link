@@ -44,24 +44,25 @@ app.get("/:id", async (req, res) => {
             </head>
             <body>
                 <div style="border:1px solid #ccc; padding:10px;">
-                    <script>
-                      let countdown = 3;
-                      const intervalId = setInterval(() => {
-                        if(countdown > 0) {
-                          document.getElementById('redirectLink').textContent = `Go to site (redirecting in ${countdown}...)`;
-                          countdown--;
-                        } else {
-                          clearInterval(intervalId);
-                          window.location.href = "${targetUrl}";
-                        }
-                      }, 1000);
-                    </script>
                     <a id="redirectLink" href="${targetUrl}" target="_blank">Go to site</a>
                     <h3>${ogTitle}</h3>
                     <img src="${ogImage}" alt="OG Image" style="max-width:100%;height:auto;">
                     <p>${ogDescription}</p>
                 </div>
             </body>
+            <script>
+            let countdown = 3;
+            const targetUrl = "{{targetUrl}}"; // Replace {{targetUrl}} with the actual URL string
+            const intervalId = setInterval(() => {
+              if(countdown > 0) {
+                document.getElementById('redirectLink').textContent = 'Go to site (redirecting in ${countdown}...)';
+                countdown--;
+              } else {
+                clearInterval(intervalId);
+                window.location.href = targetUrl; // Use the variable directly without template literals
+              }
+            }, 1000);
+          </script>
             </html>
         `);
   } catch (error) {
