@@ -22,14 +22,13 @@ app.get("/:id", async (req, res) => {
     const ogImagePathParts = ogImageURL.pathname.split('/');
     const videoIdIndex = ogImagePathParts.findIndex(part => part === 'thumbnail.jpg') - 1;
     const videoId = ogImagePathParts[videoIdIndex];
-    const mp4Link = `https://vz-629bcc17-285.b-cdn.net/${videoId}/play_720p.mp4`;
     res.send(`
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <meta name="twitter:player" content="${mp4Link}">
+                <meta name="twitter:player" content="https://drakula.link/embed/${videoId}">
                 <meta name="twitter:player:width" content="720">
                 <meta name="twitter:player:height" content="1280">
                 <meta property="og:title" content="${ogTitle}">
@@ -56,6 +55,34 @@ app.get("/:id", async (req, res) => {
     res.status(500).send("Error fetching the URL.");
   }
 });
+
+app.get('/embed/:id', (req, res) => {
+  const { id } = req.params;
+  const videoUrl = `https://vz-629bcc17-285.b-cdn.net/${id}/play_720p.mp4`;
+
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <body>
+
+    <style type="text/css">
+    video {
+       width:100%;
+       max-width:600px;
+       height:auto;
+    }
+    </style>
+
+    <video width="100%" controls>
+      <source src="${videoUrl}" type="video/mp4">
+    Your browser does not support video
+    </video>
+
+    </body>
+    </html>
+  `);
+});
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
