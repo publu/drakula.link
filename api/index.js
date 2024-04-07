@@ -39,6 +39,8 @@ app.get("/:id", async (req, res) => {
                 <meta name="twitter:description" content="${twitterDescription}">
                 <meta name="twitter:card" content="player">
                 <meta name="twitter:site" content="@DrakulaApp">
+                <meta name="twitter:player:stream" content="https://vz-629bcc17-285.b-cdn.net/${videoId}/play_720p.mp4" />
+                <meta name="twitter:player:stream:content_type" content="video/mp4" />
             </head>
             <body>
                 <div style="border:1px solid #ccc; padding:10px;">
