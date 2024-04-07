@@ -29,6 +29,9 @@ app.get("/:id", async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="twitter:player" content="${mp4Link}">
+                <meta name="twitter:player:width" content="720">
+                <meta name="twitter:player:height" content="1280">
                 <meta property="og:title" content="${ogTitle}">
                 <meta property="og:image" content="${ogImage}">
                 <meta property="og:description" content="${ogDescription}">
@@ -37,10 +40,6 @@ app.get("/:id", async (req, res) => {
                 <meta name="twitter:description" content="${twitterDescription}">
                 <meta name="twitter:card" content="player">
                 <meta name="twitter:site" content="@DrakulaApp">
-                <meta name="twitter:player" content="${mp4Link}">
-                <meta name="twitter:player:width" content="720">
-                <meta name="twitter:player:height" content="1280">
-                
             </head>
             <body>
                 <div style="border:1px solid #ccc; padding:10px;">
