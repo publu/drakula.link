@@ -22,6 +22,7 @@ app.get("/:id", async (req, res) => {
     const ogImagePathParts = ogImageURL.pathname.split('/');
     const videoIdIndex = ogImagePathParts.findIndex(part => part === 'thumbnail.jpg') - 1;
     const videoId = ogImagePathParts[videoIdIndex];
+    
     res.send(`
             <!DOCTYPE html>
             <html lang="en">
@@ -51,18 +52,24 @@ app.get("/:id", async (req, res) => {
                 </div>
             </body>
             <script>
-            let countdown = 3;
-            const targetUrl = "{{targetUrl}}"; // Replace {{targetUrl}} with the actual URL string
-            const intervalId = setInterval(() => {
-              if(countdown > 0) {
-                document.getElementById('redirectLink').textContent = 'Go to site (redirecting in ${countdown}...)';
-                countdown--;
-              } else {
-                clearInterval(intervalId);
-                window.location.href = targetUrl; // Use the variable directly without template literals
-              }
-            }, 1000);
-          </script>
+              let countdown = 3;
+              const targetUrl = "${targetUrl}"; // Use template literals for consistency
+              const intervalId = setInterval(() => {
+                if(countdown > 0) { // Correct logical operation for countdown check
+                  if(countdown == 3) {
+                    document.getElementById('redirectLink').textContent = 'Go to site (redirecting in 3...)';
+                  } else if(countdown == 2) {
+                    document.getElementById('redirectLink').textContent = 'Go to site (redirecting in 2...)';
+                  } else if(countdown == 1) {
+                    document.getElementById('redirectLink').textContent = 'Go to site (redirecting in 1...)';
+                  }
+                  countdown--;
+                } else {
+                  clearInterval(intervalId);
+                  window.location.href = targetUrl; // Correctly using the variable
+                }
+              }, 1000);
+            </script>
             </html>
         `);
   } catch (error) {
